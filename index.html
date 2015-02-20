@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- Core -->
+    <script src="core/physx/water/particleconfig.js"></script>
+    <script src="core/physx/water/particle.js"></script>
+    <script src="core/physx/water/simulationconfig.js"></script>
+    <script src="core/physx/water/simulation.js"></script>
+    <script src="core/physx/water/renderconfig.js"></script>
+    <script src="core/physx/water/render.js"></script>
+    <script src="demos/demo.js"></script>
+    <script>
+        var L        = window.LibreJs = window.LibreJs || {};
+        var Plugins  = L.Plugins      = L.Plugins      || {};
+        var Physx  = Plugins.Physx = Plugins.Physx || {};
+        var Water  = Plugins.Physx.Water = Plugins.Physx.Water   || {};
+        var Demo = Plugins.Physx.Water.Demo = Plugins.Physx.Water.Demo   || {};
+    </script>
+    <title>Waves</title>
+    <style>
+        form {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="demo" width="400" height="600"></canvas>
+
+<form id="configSim">
+    <fieldset>
+        <legend>Configure simulation:</legend>
+        Particles:<input type="text" id="particles" value="1"><br>
+        K const:<input type="text" id="kconst" value="-0.995"><br>
+        <input type="hidden" id="framerate" value="0.03333333333333333"><br>
+        Friction:<input type="text" id="friction" value="-0.5"><br>
+    </fieldset>
+</form>
+<form id="configParticle">
+    <fieldset>
+        <legend>Configure particule:</legend>
+        Mass:<input type="text" id="mass" value="0.5"><br>
+    </fieldset>
+</form>
+<script>
+(function() {
+    var canvas, simulation, simulationConfig,particleConfig, render;
+
+    //simulationConfig = new Water.SimulationConfig( 200, 1/30, -.995, -0.25 );
+    simulationConfig = new Water.SimulationConfig( 50, 1/30, -.995, -0.02 );
+    window.canvas = canvas = window.document.getElementById("demo");
+
+    particleConfig  = particleConfigFactory(canvas,window.document.getElementById("mass"));
+    window.simulation = simulation  = new Water.Simulation(simulationConfig, particleConfig);
+    render      = new Water.Render(canvas, simulation);
+    simulation.attach(render);
+    simulation.start();
+    canvas.addEventListener('click',function(evt){
+        simulationConfig = simulationConfigFactory("particles", "framerate", "kconst","friction");
+        particleConfig   = particleConfigFactory(canvas);
+
+        var x = getPosition(evt).x;
+        var pWidth = canvas.width/simulation.totalParticles;
+        var col = Math.floor(x / pWidth);
+        simulation.particles[col].setPosition(getPosition(evt).y);
+        render.draw();
+    }, false);
+
+    function getPosition(event)
+    {
+        var x = new Number();
+        var y = new Number();
+        var canvas = document.getElementById("demo");
+
+        if (event.x != undefined && event.y != undefined)
+        {
+            x = event.x;
+            y = event.y;
+        }
+        else // Firefox method to get the position
+        {
+            x = event.clientX + document.body.scrollLeft +
+            document.documentElement.scrollLeft;
+            y = canvas.height-event.clientY;
+
+        }
+
+        x -= canvas.offsetLeft;
+        return {
+            x:x,
+            y:y
+        };
+
+
+        //console.log("x: " + x + "  y: " + y);
+    }
+})();
+</script>
+
+</body>
+</html>
