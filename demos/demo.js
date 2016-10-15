@@ -12,7 +12,7 @@
 
     function stop() {
         window.simulation.stop();
-    }
+    };
 
     function update(){
         window.simulation.update();
