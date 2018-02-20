@@ -16,17 +16,16 @@
         plugin.mass             = intMass || .5;
     };
 
-    // export default class ParticleConfig {
-    //     /**
-    //      * @param int position
-    //      * @param int mass
-    //      */
-    //
-    //     constructor(position, mass) {
-    //         this.position = position;
-    //         this.mass = mass;
-    //     }
-    // }
+    export default class ParticleConfig {
+        /**
+         * @param {number} position
+         * @param {number} mass
+         */
+        constructor(position, mass) {
+            this.position = position;
+            this.mass = mass;
+        }
+    }
 
 })(window);
 //]]>

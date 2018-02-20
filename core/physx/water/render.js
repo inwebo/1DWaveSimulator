@@ -4,6 +4,18 @@
     var Plugins  = L.Plugins      = L.Plugins      || {};
     var Physx  = Plugins.Physx = Plugins.Physx || {};
     var Water  = Plugins.Physx.Water = Plugins.Physx.Water   || {};
+
+    export default class Render {
+        /**
+         * @param {CanvasRenderingContext2D} ctx
+         * @param simulation
+         */
+        constructor(ctx, simulation) {
+            this.ctx = ctx;
+            this.simulation = simulation;
+        }
+    }
+
     Water.Render          = function(canvas, simulation, renderConfig){
         var plugin = this;
 

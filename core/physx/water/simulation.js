@@ -6,6 +6,13 @@
     var Water  = Plugins.Physx.Water = Plugins.Physx.Water   || {};
     var Particle = Plugins.Physx.Water.Particle;
     var Render = Plugins.Physx.Water.Render;
+
+    export default class Simulation {
+        constructor() {
+
+        }
+    }
+
     Water.Simulation = function( simulationConfig, particleConfig){
         var plugin = this;
 
