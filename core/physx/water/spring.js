@@ -1,4 +1,4 @@
-export default class Damper {
+export default class Spring {
 
     /**
      * @param {number} x

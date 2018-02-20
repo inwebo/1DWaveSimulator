@@ -1,4 +1,4 @@
-export default class DamperConfig {
+export default class SpringConfig {
     /**
      * @param {number} position
      * @param {number} mass

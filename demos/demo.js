@@ -1,9 +1,9 @@
-import * as Damper from '../core/physx/water/damper';
-import * as DamperConfig from '../core/physx/water/damper-config';
-import * as Simulation from '../core/physx/water/simulation';
+import * as Spring           from '../core/physx/water/spring';
+import * as SpringConfig     from '../core/physx/water/spring-config';
+import * as Simulation       from '../core/physx/water/simulation';
 import * as SimulationConfig from '../core/physx/water/simulation-config';
-import * as Render from '../core/physx/water/render';
-import * as RenderConfig from '../core/physx/water/render-config';
+import * as Render           from '../core/physx/water/render';
+import * as RenderConfig     from '../core/physx/water/render-config';
 
 let canvas,
     simulation,
@@ -14,7 +14,7 @@ let canvas,
 canvas           = window.document.getElementById("demo");
 
 simulationConfig = new SimulationConfig(50, 1/30, -.995, -0.02);
-damperConfig     = new DamperConfig();
+damperConfig     = new SpringConfig();
 simulation       = new Simulation(simulationConfig, damperConfig);
 render           = new Render(canvas, simulation);
 
