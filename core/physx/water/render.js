@@ -1,88 +1,54 @@
-//<![CDATA[
-;(function(window){
-    var L        = window.LibreJs = window.LibreJs || {};
-    var Plugins  = L.Plugins      = L.Plugins      || {};
-    var Physx  = Plugins.Physx = Plugins.Physx || {};
-    var Water  = Plugins.Physx.Water = Plugins.Physx.Water   || {};
-
-    export default class Render {
-        /**
-         * @param {HTMLCanvasElement} canvas
-         * @param simulation
-         */
-        constructor(canvas, simulation) {
-            this.ctx        = ctx;
-            this.simulation = simulation;
-        }
-
-        clear() {
-
-        }
-
-
+export default class Render {
+    /**
+     * @param {HTMLCanvasElement} canvas
+     * @param simulation
+     */
+    constructor(canvas, simulation) {
+        this.canvas = canvas;
+        this.ctx = this.canvas.getContext("2d");
+        this.simulation = simulation;
+        this.reverseOrigin();
+        this.draw();
     }
 
-    Water.Render          = function(canvas, simulation, renderConfig){
-        var plugin = this;
+    clear() {
+        this.ctx.fillStyle = "white";
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
 
-        plugin.canvas;
-        plugin.ctx;
-        plugin.simulation;
-
-        var init = function(canvas,simulation){
-            plugin.canvas = canvas;
-            plugin.ctx = plugin.canvas.getContext( "2d" );
-            plugin.simulation = simulation;
-            setOrigin();
-            plugin.draw();
-        };
-
-        plugin.clear = function(){
-            plugin.ctx.fillStyle = "white";
-            plugin.ctx.fillRect(0, 0, plugin.canvas.width,plugin.canvas.height);
-        };
-
-        var getParticleWidth = function(){
-            return Math.floor(plugin.canvas.width/plugin.simulation.totalParticles);
-        };
-
-        var setOrigin = function(){
-            plugin.ctx.translate( 0, plugin.canvas.height );
-            plugin.ctx.scale( 1, -1 );
-        };
-
-        plugin.draw = function(){
-            plugin.clear();
-            var w = getParticleWidth();
-            // add linear gradient
-            var grd = plugin.ctx.createLinearGradient(0, 0, 0, canvas.height);
-            // light blue
-            grd.addColorStop(0, '#004CB3');
-            // dark blue
-            grd.addColorStop(1, '#8ED6FF');
-            //context.fillStyle = grd;
-
-            plugin.ctx.fillStyle = grd;
-            plugin.ctx.beginPath();
-            plugin.ctx.moveTo(0,0);
-
-            plugin.ctx.lineTo(0,plugin.simulation.particles[0].position);
-
-            for(var i = 0; i < plugin.simulation.particles.length; i++) {
-                if(i%2 === 0) {
-                    //plugin.simulation.particles[i].draw(plugin.ctx, w*i, w);
-                    plugin.simulation.particles[i].drawLine(plugin.ctx,w*i,plugin.simulation.particles[i].position);
-                }
-            }
-
-            plugin.ctx.lineTo(canvas.width,canvas.height/2);
-            plugin.ctx.lineTo(canvas.width,0);
-            plugin.ctx.closePath();
-            plugin.ctx.fill();
-        };
-
-        init(canvas,simulation);
+    getParticleWidth = function () {
+        return Math.floor(this.canvas.width / this.simulation.totalParticles);
     };
 
-})(window);
-//]]>
+    draw() {
+        this.clear();
+        var w = this.getParticleWidth();
+        // add linear gradient
+        var grd = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+        // light blue
+        grd.addColorStop(0, '#004CB3');
+        // dark blue
+        grd.addColorStop(1, '#8ED6FF');
+
+        this.ctx.fillStyle = grd;
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, 0);
+        this.ctx.lineTo(0, this.simulation.particles[0].position);
+
+        for (var i = 0; i < this.simulation.particles.length; i++) {
+            if (i % 2 === 0) {
+                this.simulation.particles[i].drawLine(this.ctx, w * i, this.simulation.particles[i].position);
+            }
+        }
+
+        this.ctx.lineTo(canvas.width, canvas.height / 2);
+        this.ctx.lineTo(canvas.width, 0);
+        this.ctx.closePath();
+        this.ctx.fill();
+    }
+
+    reverseOrigin() {
+        this.ctx.translate(0, this.canvas.height);
+        this.ctx.scale(1, -1);
+    }
+}

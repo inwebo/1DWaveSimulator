@@ -1,4 +1,4 @@
-export default class ParticleConfig {
+export default class DamperConfig {
     /**
      * @param {number} position
      * @param {number} mass

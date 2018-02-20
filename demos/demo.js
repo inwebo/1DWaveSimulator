@@ -1,36 +1,74 @@
-var L = window.LibreJs = window.LibreJs || {};
-var Plugins = L.Plugins = L.Plugins || {};
-var Physx = Plugins.Physx = Plugins.Physx || {};
-var Water = Plugins.Physx.Water = Plugins.Physx.Water || {};
+import * as Damper from '../core/physx/water/damper';
+import * as DamperConfig from '../core/physx/water/damper-config';
+import * as Simulation from '../core/physx/water/simulation';
+import * as SimulationConfig from '../core/physx/water/simulation-config';
+import * as Render from '../core/physx/water/render';
+import * as RenderConfig from '../core/physx/water/render-config';
 
-var mass = 'mass';
+let canvas,
+    simulation,
+    simulationConfig,
+    damperConfig,
+    render;
 
-function start() {
-    window.simulation.start();
-};
+canvas           = window.document.getElementById("demo");
 
-function stop() {
-    window.simulation.stop();
-};
+simulationConfig = new SimulationConfig(50, 1/30, -.995, -0.02);
+damperConfig     = new DamperConfig();
+simulation       = new Simulation(simulationConfig, damperConfig);
+render           = new Render(canvas, simulation);
 
-function update() {
-    window.simulation.update();
-};
+    //
+    // //simulationConfig = new Water.SimulationConfig( 200, 1/30, -.995, -0.25 );
+    // simulationConfig = new Water.SimulationConfig( 50, 1/30, -.995, -0.02 );
+    // window.canvas = canvas = window.document.getElementById("demo");
+    //
+    // particleConfig  = particleConfigFactory(canvas,window.document.getElementById("mass"));
+    // window.simulation = simulation  = new Water.Simulation(simulationConfig, particleConfig);
+    // render      = new Water.Render(canvas, simulation);
+    // simulation.attach(render);
+    // simulation.start();
+    // canvas.addEventListener('click',function(evt){
+    //     simulationConfig = simulationConfigFactory("particles", "framerate", "kconst","friction");
+    //     particleConfig   = particleConfigFactory(canvas);
+    //
+    //     var x = getPosition(evt).x;
+    //     var pWidth = canvas.width/simulation.totalParticles;
+    //     var col = Math.floor(x / pWidth);
+    //     simulation.particles[col].setPosition(getPosition(evt).y);
+    //     render.draw();
+    // }, false);
 
-function clear() {
-    console.clear();
-};
-
-var simulationConfigFactory = function (sInputParticle, sInputFrameRate, sInputK, sInputFriction) {
-    var intParticles = parseInt(window.document.getElementById(sInputParticle).value);
-    var sFramerate = parseFloat(window.document.getElementById(sInputFrameRate).value);
-    var sK = parseFloat(window.document.getElementById(sInputK).value);
-    var sFriction = parseFloat(window.document.getElementById(sInputFriction).value);
-    var simConfig = new Water.SimulationConfig(intParticles, sFramerate, sK, sFriction);
-    return simConfig;
-};
-var particleConfigFactory = function (canvas) {
-    var mass = parseFloat(window.document.getElementById('mass').value);
-    var particleConfig = new Water.ParticleConfig(canvas.height / 2, mass);
-    return particleConfig;
-};
+        // /**
+        //  * Fix relative element
+        //  * @type {Element}
+        //  */
+        // var container = window.document.getElementById("col-main-post-content");
+    //
+    //     function getRelativeCoordinates ( e ) {
+    //
+    //         var pos = {}, offset = {}, ref;
+    //
+    //         ref = container.offsetParent;
+    //
+    //         pos.x = !! e.touches ? e.touches[ 0 ].pageX : e.pageX;
+    //         pos.y = !! e.touches ? e.touches[ 0 ].pageY : e.pageY;
+    //
+    //         offset.left = container.offsetLeft;
+    //         offset.top = container.offsetTop;
+    //
+    //         while ( ref ) {
+    //
+    //             offset.left += ref.offsetLeft;
+    //             offset.top += ref.offsetTop;
+    //
+    //             ref = ref.offsetParent;
+    //         }
+    //
+    //         return {
+    //             x : pos.x - offset.left,
+    //             y : pos.y - offset.top,
+    //         };
+    //
+    //     }
+    // }
