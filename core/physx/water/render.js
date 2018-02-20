@@ -7,13 +7,19 @@
 
     export default class Render {
         /**
-         * @param {CanvasRenderingContext2D} ctx
+         * @param {HTMLCanvasElement} canvas
          * @param simulation
          */
-        constructor(ctx, simulation) {
-            this.ctx = ctx;
+        constructor(canvas, simulation) {
+            this.ctx        = ctx;
             this.simulation = simulation;
         }
+
+        clear() {
+
+        }
+
+
     }
 
     Water.Render          = function(canvas, simulation, renderConfig){
