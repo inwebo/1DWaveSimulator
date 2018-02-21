@@ -1,5 +1,3 @@
-var mass = 'mass';
-
 function start() {
     window.simulation.start();
 };
@@ -24,21 +22,13 @@ var simulationConfigFactory = function (sInputParticle, sInputFrameRate, sInputK
     var simConfig = new Water.SimulationConfig(intParticles, sFramerate, sK, sFriction);
     return simConfig;
 };
-var particleConfigFactory = function (canvas) {
-    var mass = parseFloat(window.document.getElementById('mass').value);
-    var particleConfig = new Water.ParticleConfig(canvas.height / 2, mass);
-    return particleConfig;
-};
 
-
-function getPosition(event)
-{
+function getPosition(event) {
     var x = new Number();
     var y = new Number();
     var canvas = document.getElementById("demo");
 
-    if (event.x != undefined && event.y != undefined)
-    {
+    if (event.x != undefined && event.y != undefined) {
         x = event.x;
         y = event.y;
     }
@@ -46,12 +36,13 @@ function getPosition(event)
     {
         x = event.clientX + document.body.scrollLeft +
             document.documentElement.scrollLeft;
-        y = canvas.height-event.clientY;
+        y = canvas.height - event.clientY;
 
     }
 
     x -= canvas.offsetLeft;
     return {
-        x:x,
-        y:y
+        x: x,
+        y: y
     };
+}

@@ -1,7 +1,7 @@
 export default class Render {
     /**
      * @param {HTMLCanvasElement} canvas
-     * @param simulation
+     * @param {Simulation}        simulation
      */
     constructor(canvas, simulation) {
         this.canvas = canvas;
@@ -16,15 +16,15 @@ export default class Render {
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    getParticleWidth = function () {
-        return Math.floor(this.canvas.width / this.simulation.totalParticles);
+    getParticleWidth() {
+        return Math.floor(this.canvas.width / this.simulation.springs.length);
     };
 
     draw() {
         this.clear();
-        var w = this.getParticleWidth();
+        let w = this.getParticleWidth();
         // add linear gradient
-        var grd = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+        let grd = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
         // light blue
         grd.addColorStop(0, '#004CB3');
         // dark blue
@@ -33,16 +33,16 @@ export default class Render {
         this.ctx.fillStyle = grd;
         this.ctx.beginPath();
         this.ctx.moveTo(0, 0);
-        this.ctx.lineTo(0, this.simulation.particles[0].position);
+        this.ctx.lineTo(0, this.simulation.springs[0].position);
 
-        for (var i = 0; i < this.simulation.particles.length; i++) {
+        for (let i = 0; i < this.simulation.springs.length; i++) {
             if (i % 2 === 0) {
-                this.simulation.particles[i].drawLine(this.ctx, w * i, this.simulation.particles[i].position);
+                this.simulation.springs[i].drawLine(this.ctx, w * i, this.simulation.springs[i].position);
             }
         }
 
-        this.ctx.lineTo(canvas.width, canvas.height / 2);
-        this.ctx.lineTo(canvas.width, 0);
+        this.ctx.lineTo(this.canvas.width, this.canvas.height / 2);
+        this.ctx.lineTo(this.canvas.width, 0);
         this.ctx.closePath();
         this.ctx.fill();
     }
