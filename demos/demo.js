@@ -14,11 +14,10 @@ let canvas,
 canvas           = window.document.getElementById("demo");
 
 simulationConfig = new SimulationConfig(50, 1/30, -.995, -0.02);
-damperConfig     = new SpringConfig();
 simulation       = new Simulation(simulationConfig, damperConfig);
 render           = new Render(canvas, simulation);
 
-    //
+
     // //simulationConfig = new Water.SimulationConfig( 200, 1/30, -.995, -0.25 );
     // simulationConfig = new Water.SimulationConfig( 50, 1/30, -.995, -0.02 );
     // window.canvas = canvas = window.document.getElementById("demo");

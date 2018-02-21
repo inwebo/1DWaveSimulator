@@ -1,91 +1,107 @@
-Water.Simulation = function (simulationConfig, particleConfig) {
-    var plugin = this;
+import Render from './render';
 
-    plugin.config = null;
-    plugin.engine = null;
-    plugin.totalParticles = null;
-    plugin.particles = [];
-    plugin.particleConfig = null;
+export default class Simulation {
 
-    plugin.observers = [];
+    /**
+     * @param {SimulationConfig} simulationConfig
+     * @param {SpringConfig}     springConfig
+     */
+    constructor(simulationConfig, springConfig) {
+        /** @type {SimulationConfig} */
+        this.simulationConfig = simulationConfig;
+        /** @type {SpringConfig} */
+        this.springConfig     = springConfig;
+        /** @type {Array<Render>} */
+        this.observers        = [];
+        /** @type {Array<Spring>} */
+        this.springs          = [];
+        /** @type {number} */
+        this.engine           = null;
+    }
 
-    var init = function (simulationConfig, particleConfig) {
-        plugin.config = simulationConfig;
-        plugin.particleConfig = particleConfig;
-        plugin.totalParticles = plugin.config.particles;
+    /**
+     * Start simulation
+     */
+    start() {
+        this.engine = setInterval(function () {
+            this.update();
+        }, this.simulationConfig.framerate);
+    }
 
-        (function (intTotalParticles, particleConfig) {
-            var i = 0;
-            for (i; i < intTotalParticles; i++) {
-                var particle = new Particle(particleConfig.naturalPosition, particleConfig.mass);
-                plugin.particles.push(particle);
-            }
-        })(plugin.totalParticles, plugin.particleConfig);
-    };
+    /**
+     * Stop simulation
+     */
+    stop() {
+        clearInterval(this.engine);
+    }
 
-    plugin.start = function () {
-        plugin.engine = setInterval(function () {
-            plugin.update();
-        }, plugin.config.framerate);
-    };
+    /**
+     * Simulation step
+     */
+    update() {
+        for (let i = 0; i < this.springs.length; i++) {
 
-    plugin.update = function () {
-        for (var i = 0; i < plugin.totalParticles; i++) {
-            var particle = plugin.particles[i];
-            var force,
+            let spring,
+                force,
                 smoothedForce,
                 damper,
                 acceleration,
                 velocity,
-                computedPosition;
+                computedPosition,
+                left,
+                right;
 
-            var left = getLeft(i);
-            var right = getRight(i);
+            spring = this.springs[i];
+            left   = this.getPrevSpring(i);
+            right  = this.getNextSpring(i);
 
             // Force
-            force = particle.getAmplitude();
-            smoothedForce = plugin.config.kConstant * force;
+            force            = spring.getAmplitude();
+            smoothedForce    = this.simulationConfig.kConstant * force;
+            damper           = spring.velocity * this.simulationConfig.friction;
+            acceleration     = (smoothedForce + damper) / this.springConfig.mass;
+            velocity         = acceleration * this.simulationConfig.framerate;
+            spring.velocity += velocity;
 
-            damper = particle.velocity * plugin.config.friction;
+            computedPosition = spring.velocity * this.simulationConfig.framerate;
 
-            acceleration = ( smoothedForce + damper ) / plugin.particleConfig.mass;
-            velocity = acceleration * plugin.config.framerate;
-            particle.velocity += velocity;
-
-            computedPosition = particle.velocity * plugin.config.framerate;
-
-            particle.position += computedPosition;
-            left.position += computedPosition * plugin.config.friction;
-            left.velocity += velocity * 0.99;
-            right.position += computedPosition * 0.99;
-            right.velocity += velocity * plugin.config.friction;
+            spring.position += computedPosition;
+            left.position   += computedPosition * this.simulationConfig.friction;
+            left.velocity   += velocity * 0.99;
+            right.position  += computedPosition * 0.99;
+            right.velocity  += velocity * this.simulationConfig.friction;
         }
-        for (var i = 0; i < plugin.observers.length; i++) {
-            plugin.observers[i].draw();
+
+        // Useless ?
+        for (let i = 0; i < this.observers.length; i++) {
+            this.observers[i].draw();
         }
-    };
+    }
 
-    var getVelocity = function (force) {
-        var smoothed = force * plugin.config.kConstant;
-    };
+    /**
+     * @param {number} index
+     *
+     * @returns {Spring}
+     */
+    getPrevSpring(index) {
+        return (index !== 0) ? this.springs[index - 1] : this.springs[index];
+    }
 
-    var getLeft = function (i) {
-        return (i !== 0) ? plugin.particles[i - 1] : plugin.particles[i];
-    };
+    /**
+     * @param {number} index
+     *
+     * @returns {Spring}
+     */
+    getNextSpring(index) {
+        return (index !== this.springs.length - 1) ? this.springs[index + 1] : this.springs[index];
+    }
 
-    var getRight = function (i) {
-        return (i !== plugin.totalParticles - 1) ? plugin.particles[i + 1] : plugin.particles[i];
-    };
-
-    plugin.stop = function () {
-        clearInterval(plugin.engine);
-    };
-
-    plugin.attach = function (observer) {
-        if (observer instanceof Plugins.Physx.Water.Render) {
-            plugin.observers.push(observer);
+    /**
+     * @param {Render} observer
+     */
+    attachObserver(observer) {
+        if (observer instanceof Render) {
+            this.observers.push(observer);
         }
-    };
-
-    init(simulationConfig, particleConfig);
-};
+    }
+}
