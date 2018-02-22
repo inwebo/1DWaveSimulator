@@ -33,11 +33,12 @@ export default class Render {
         this.ctx.fillStyle = grd;
         this.ctx.beginPath();
         this.ctx.moveTo(0, 0);
-        this.ctx.lineTo(0, this.simulation.springs[0].position);
+        this.ctx.lineTo(0, this.simulation.springs[0].x);
 
         for (let i = 0; i < this.simulation.springs.length; i++) {
             if (i % 2 === 0) {
-                this.simulation.springs[i].drawLine(this.ctx, w * i, this.simulation.springs[i].position);
+                let spring = this.simulation.springs[i];
+                this.simulation.springs[i].drawLine(this.ctx, w * i, spring.x);
             }
         }
 
