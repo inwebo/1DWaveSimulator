@@ -1,9 +1,9 @@
-import * as Spring           from '../core/physx/water/spring';
-import * as SpringConfig     from '../core/physx/water/spring-config';
-import * as Simulation       from '../core/physx/water/simulation';
-import * as SimulationConfig from '../core/physx/water/simulation-config';
-import * as Render           from '../core/physx/water/render';
-import * as RenderConfig     from '../core/physx/water/render-config';
+import Spring           from '../core/physx/water/spring';
+import SpringConfig     from '../core/physx/water/spring-config';
+import Simulation       from '../core/physx/water/simulation';
+import SimulationConfig from '../core/physx/water/simulation-config';
+import Render           from '../core/physx/water/render';
+import RenderConfig     from '../core/physx/water/render-config';
 
 let canvas,
     mass,
@@ -23,13 +23,47 @@ framerate        = parseFloat(window.document.getElementById('framerate').value)
 kConst           = parseFloat(window.document.getElementById('kconst').value);
 friction         = parseFloat(window.document.getElementById('friction').value);
 
-var spring = new Spring(7,10);
-// simulationConfig = new SimulationConfig(countSprings, 1/30, -.995, -0.02);
-// springConfig     = new SpringConfig(canvas.height / 2, mass);
-// simulation       = new Simulation(simulationConfig, springConfig);
-// render           = new Render(canvas, simulation);
+simulationConfig = new SimulationConfig(countSprings, 1/30, -.995, -0.02);
+springConfig     = new SpringConfig(canvas.height / 2, mass);
 
-// simulation.start();
+let springs = [];
+
+for(let i=0; i<400; i++) {
+    springs.push(new Spring(i, mass));
+}
+
+simulation       = new Simulation(simulationConfig, springConfig);
+simulation.springs = springs;
+
+render           = new Render(canvas, simulation);
+
+// console.log(spring, simulationConfig, springConfig);
+simulation.attachObserver(render);
+simulation.start();
+
+// function getPosition(event) {
+//     var x = new Number();
+//     var y = new Number();
+//     var canvas = document.getElementById("demo");
+//
+//     if (event.x != undefined && event.y != undefined) {
+//         x = event.x;
+//         y = event.y;
+//     }
+//     else // Firefox method to get the position
+//     {
+//         x = event.clientX + document.body.scrollLeft +
+//             document.documentElement.scrollLeft;
+//         y = canvas.height - event.clientY;
+//
+//     }
+//
+//     x -= canvas.offsetLeft;
+//     return {
+//         x: x,
+//         y: y
+//     };
+// }
 
 // canvas.addEventListener('click', function(evt){
 //     let simulationConfig = simulationConfigFactory("particles", "framerate", "kconst","friction");
