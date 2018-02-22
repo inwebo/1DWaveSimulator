@@ -11,18 +11,18 @@
 <form id="configSim">
     <fieldset>
         <legend>Configure simulation:</legend>
-        Particles:<input type="text" id="particles" value="1"><br>
-        K const:<input type="text" id="kconst" value="-0.995"><br>
-        <input type="hidden" id="framerate" value="0.03333333333333333"><br>
-        Friction:<input type="text" id="friction" value="-0.02"><br>
+        Spring:<input title="Total springs" type="text" id="particles" value="1"><br>
+        K const:<input title="kConst" type="text" id="kconst" value="-0.995"><br>
+        <input title="framerate" type="hidden" id="framerate" value="0.03333333333333333"><br>
+        Friction:<input title="friction" type="text" id="friction" value="-0.02"><br>
     </fieldset>
 </form>
 <form id="configParticle">
     <fieldset>
         <legend>Configure particule:</legend>
-        Mass:<input type="text" id="mass" value="0.5"><br>
+        Mass:<input title="Mass" type="text" id="mass" value="0.5"><br>
     </fieldset>
 </form>
-<script src="app.js"></script>
+<script src="build/app.js"></script>
 </body>
 </html>
