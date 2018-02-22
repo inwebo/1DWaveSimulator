@@ -1,8 +1,12 @@
+const path = require('path');
+const webpack = require('webpack');
+
 module.exports = {
     entry: {
         main: './demos/demo.js'
     },
     output: {
+        path: path.resolve(__dirname, 'build'),
         filename: 'app.js'
     },
     module: {
@@ -16,4 +20,8 @@ module.exports = {
             }
         ]
     },
+    stats: {
+        colors: true
+    },
+    devtool: 'source-map'
 };
