@@ -23,9 +23,9 @@ export default class Simulation {
      * Start simulation
      */
     start() {
-        this.engine = setInterval(function () {
-            this.update();
-        }, this.simulationConfig.framerate);
+        this.engine = setInterval((function (self) {
+            self.update();
+        })(this), this.simulationConfig.framerate);
     }
 
     /**
