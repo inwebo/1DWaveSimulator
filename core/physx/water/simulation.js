@@ -40,7 +40,6 @@ export default class Simulation {
      */
     update() {
         for (let i = 0; i < this.springs.length; i++) {
-
             let spring,
                 force,
                 smoothedForce,
@@ -72,10 +71,19 @@ export default class Simulation {
             right.velocity  += velocity * this.simulationConfig.friction;
         }
 
-        // Useless ?
-        for (let i = 0; i < this.observers.length; i++) {
-            this.observers[i].draw();
-        }
+        let event = (function(self) {
+            return new CustomEvent(
+                "simulationStep",
+                {
+                    detail: {
+                        simulation: self,
+                    },
+                    bubbles: true,
+                    cancelable: true
+                });
+        })(this);
+        console.log(event.detail.simulation);
+        document.dispatchEvent(event);
     }
 
     /**

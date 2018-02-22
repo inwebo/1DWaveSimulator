@@ -8,7 +8,7 @@ export default class Render {
         this.ctx = this.canvas.getContext("2d");
         this.simulation = simulation;
         this.reverseOrigin();
-        this.draw();
+        // this.draw();
     }
 
     clear() {
@@ -20,7 +20,8 @@ export default class Render {
         return Math.floor(this.canvas.width / this.simulation.springs.length);
     };
 
-    draw() {
+    draw(event) {
+        console.log(event.detail.simulation);
         this.clear();
         let w = this.getParticleWidth();
         // add linear gradient
