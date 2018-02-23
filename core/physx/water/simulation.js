@@ -1,5 +1,3 @@
-import Render from './render';
-
 export default class Simulation {
 
     /**
@@ -8,8 +6,6 @@ export default class Simulation {
     constructor(simulationConfig) {
         /** @type {SimulationConfig} */
         this.simulationConfig = simulationConfig;
-        /** @type {Array<Render>} */
-        this.observers        = [];
         /** @type {Array<Spring>} */
         this.springs          = [];
         /** @type {number} */
@@ -101,14 +97,5 @@ export default class Simulation {
      */
     getNextSpring(index) {
         return (index !== this.springs.length - 1) ? this.springs[index + 1] : this.springs[index];
-    }
-
-    /**
-     * @param {Render} observer
-     */
-    attachObserver(observer) {
-        if (observer instanceof Render) {
-            this.observers.push(observer);
-        }
     }
 }
