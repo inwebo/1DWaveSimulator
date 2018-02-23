@@ -23,7 +23,7 @@ var simulationConfigFactory = function (sInputParticle, sInputFrameRate, sInputK
     return simConfig;
 };
 
-function getPosition(event) {
+export function getPosition(event) {
     var x = new Number();
     var y = new Number();
     var canvas = document.getElementById("demo");

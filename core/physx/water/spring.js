@@ -13,31 +13,6 @@ export default class Spring {
     }
 
     /**
-     * @param {number} position
-     */
-    setPosition(position) {
-        this.x = position;
-    }
-
-    /**
-     * @param {CanvasRenderingContext2D} ctx
-     * @param {number}                   x
-     * @param {number}                   width
-     */
-    draw(ctx, x, width) {
-        ctx.fillRect(x, 0, width, this.x);
-    }
-
-    /**
-     * @param {CanvasRenderingContext2D} ctx
-     * @param {number}                   x
-     * @param {number}                   y
-     */
-    drawLine(ctx, x, y) {
-        ctx.lineTo(x, y)
-    }
-
-    /**
      * @returns {number}
      */
     getAmplitude() {

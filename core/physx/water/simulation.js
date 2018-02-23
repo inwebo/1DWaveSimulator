@@ -4,13 +4,10 @@ export default class Simulation {
 
     /**
      * @param {SimulationConfig} simulationConfig
-     * @param {SpringConfig}     springConfig
      */
-    constructor(simulationConfig, springConfig) {
+    constructor(simulationConfig) {
         /** @type {SimulationConfig} */
         this.simulationConfig = simulationConfig;
-        /** @type {SpringConfig} */
-        this.springConfig     = springConfig;
         /** @type {Array<Render>} */
         this.observers        = [];
         /** @type {Array<Spring>} */
@@ -23,9 +20,11 @@ export default class Simulation {
      * Start simulation
      */
     start() {
-        this.engine = setInterval((function (self) {
-            self.update();
-        })(this), this.simulationConfig.framerate);
+        let callback = function() {
+            this.update();
+        }.bind(this);
+
+        this.engine = setInterval(function() { callback() }, this.simulationConfig.framerate);
     }
 
     /**
@@ -58,17 +57,17 @@ export default class Simulation {
             force            = spring.getAmplitude();
             smoothedForce    = this.simulationConfig.kConstant * force;
             damper           = spring.velocity * this.simulationConfig.friction;
-            acceleration     = (smoothedForce + damper) / this.springConfig.mass;
+            acceleration     = (smoothedForce + damper) / spring.mass;
             velocity         = acceleration * this.simulationConfig.framerate;
             spring.velocity += velocity;
 
             computedPosition = spring.velocity * this.simulationConfig.framerate;
 
-            spring.position += computedPosition;
-            left.position   += computedPosition * this.simulationConfig.friction;
-            left.velocity   += velocity * 0.99;
-            right.position  += computedPosition * 0.99;
-            right.velocity  += velocity * this.simulationConfig.friction;
+            spring.x       += computedPosition;
+            left.x         += computedPosition * this.simulationConfig.friction;
+            left.velocity  += velocity * 0.99;
+            right.x        += computedPosition * 0.99;
+            right.velocity += velocity * this.simulationConfig.friction;
         }
 
         let event = (function(self) {
@@ -82,7 +81,7 @@ export default class Simulation {
                     cancelable: true
                 });
         })(this);
-        console.log(event.detail.simulation);
+
         document.dispatchEvent(event);
     }
 

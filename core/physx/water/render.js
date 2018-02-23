@@ -8,7 +8,6 @@ export default class Render {
         this.ctx = this.canvas.getContext("2d");
         this.simulation = simulation;
         this.reverseOrigin();
-        // this.draw();
     }
 
     clear() {
@@ -20,8 +19,10 @@ export default class Render {
         return Math.floor(this.canvas.width / this.simulation.springs.length);
     };
 
+    /**
+     * @param {CustomEvent} event
+     */
     draw(event) {
-        console.log(event.detail.simulation);
         this.clear();
         let w = this.getParticleWidth();
         // add linear gradient
@@ -39,7 +40,7 @@ export default class Render {
         for (let i = 0; i < this.simulation.springs.length; i++) {
             if (i % 2 === 0) {
                 let spring = this.simulation.springs[i];
-                this.simulation.springs[i].drawLine(this.ctx, w * i, spring.x);
+                this.ctx.lineTo(w*i, spring.x);
             }
         }
 
